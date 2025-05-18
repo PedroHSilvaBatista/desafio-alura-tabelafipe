@@ -1,18 +1,19 @@
 package br.com.alura.carros.model;
 
-public class Marca {
-    private String codigo;
+public class Modelo {
+    private int codigo;
     private String nome;
 
-    public Marca () {
-
+    public Modelo(DadosModelo dadosModelo) {
+        this.codigo = dadosModelo.codigo();
+        this.nome = dadosModelo.nome();
     }
 
-    public String getCodigo() {
+    public int getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(String codigo) {
+    public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
 
