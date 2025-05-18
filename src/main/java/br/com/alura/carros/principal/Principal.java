@@ -1,23 +1,20 @@
 package br.com.alura.carros.principal;
 
 import br.com.alura.carros.model.DadosListaModelo;
-import br.com.alura.carros.model.DadosModelo;
 import br.com.alura.carros.model.Modelo;
 import br.com.alura.carros.service.ConsumoAPI;
 import br.com.alura.carros.service.ConverteDados;
 import br.com.alura.carros.model.Marca;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import java.util.Map;
 import java.util.Scanner;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Principal {
-    private Scanner leitura = new Scanner(System.in);
+    private final Scanner leitura = new Scanner(System.in);
     private String endereco = "https://parallelum.com.br/fipe/api/v1/";
-    private ConsumoAPI consumo = new ConsumoAPI();
-    private ConverteDados conversor = new ConverteDados();
+    private final ConsumoAPI consumo = new ConsumoAPI();
+    private final ConverteDados conversor = new ConverteDados();
 
     public void exibirMenu() {
         System.out.println("""
@@ -41,7 +38,7 @@ public class Principal {
         System.out.print("Informe o código da marca para consulta: ");
         String codigoMarcaUsuario = leitura.nextLine();
 
-        endereco += codigoMarcaUsuario + "/modelos";
+        endereco += codigoMarcaUsuario + "/modelos/";
 
         json = consumo.obterDados(endereco);
         System.out.println(json);
@@ -55,5 +52,24 @@ public class Principal {
                 .toList();
 
         modelos.forEach(System.out::println);
+
+        System.out.print("Digite um trecho do nome do modelo para consulta: ");
+        String trechoModeloUsuario = leitura.nextLine().toLowerCase();
+
+        System.out.println();
+
+        modelos.stream()
+                .filter(m -> m.getNome().toLowerCase().contains(trechoModeloUsuario))
+                .forEach(System.out::println);
+
+        System.out.println();
+        System.out.print("Digite o código do modelo para consultar valores: ");
+        String codigoModeloUsuario = leitura.nextLine();
+        System.out.println();
+
+        endereco += codigoModeloUsuario + "/anos";
+        json = consumo.obterDados(endereco);
+
+        System.out.println(json);
     }
 }
