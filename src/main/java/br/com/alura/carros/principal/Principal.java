@@ -1,12 +1,11 @@
 package br.com.alura.carros.principal;
 
-import br.com.alura.carros.model.DadosListaModelo;
-import br.com.alura.carros.model.Modelo;
+import br.com.alura.carros.model.*;
 import br.com.alura.carros.service.ConsumoAPI;
 import br.com.alura.carros.service.ConverteDados;
-import br.com.alura.carros.model.Marca;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class Principal {
         String json = consumo.obterDados(endereco);
         System.out.println(json);
 
-        List<Marca> listaDeMarcas = conversor.converterDados(json, new TypeReference<List<Marca>>() {
+        List<Marca> listaDeMarcas = conversor.converterDados(json, new TypeReference<>() {
         });
         listaDeMarcas.forEach(System.out::println);
 
@@ -43,7 +42,7 @@ public class Principal {
         json = consumo.obterDados(endereco);
         System.out.println(json);
 
-        DadosListaModelo dadosListaModelo = conversor.converterDados(json, new TypeReference<DadosListaModelo>() {
+        DadosListaModelo dadosListaModelo = conversor.converterDados(json, new TypeReference<>() {
         });
         System.out.println(dadosListaModelo);
 
@@ -67,9 +66,21 @@ public class Principal {
         String codigoModeloUsuario = leitura.nextLine();
         System.out.println();
 
-        endereco += codigoModeloUsuario + "/anos";
+        endereco += codigoModeloUsuario + "/anos/";
         json = consumo.obterDados(endereco);
 
         System.out.println(json);
+
+        List<DadosAnos> dadosAnos = conversor.converterDados(json, new TypeReference<>() {});
+        List<DadosVeiculo> dadosVeiculo = new ArrayList<>();
+
+        for (DadosAnos anos: dadosAnos) {
+            String tempEndereco = endereco + anos.codigo();
+            json = consumo.obterDados(tempEndereco);
+            dadosVeiculo.add(conversor.converterDados(json, new TypeReference<>(){}));
+        }
+
+        dadosVeiculo.forEach(System.out::println);
+
     }
 }
