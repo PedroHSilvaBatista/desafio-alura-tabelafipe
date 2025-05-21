@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Principal {
     private final Scanner leitura = new Scanner(System.in);
@@ -28,7 +29,6 @@ public class Principal {
         endereco += opcaoUsuario + "/marcas/";
 
         String json = consumo.obterDados(endereco);
-        System.out.println(json);
 
         List<Marca> listaDeMarcas = conversor.converterDados(json, new TypeReference<>() {
         });
@@ -40,7 +40,6 @@ public class Principal {
         endereco += codigoMarcaUsuario + "/modelos/";
 
         json = consumo.obterDados(endereco);
-        System.out.println(json);
 
         DadosListaModelo dadosListaModelo = conversor.converterDados(json, new TypeReference<>() {
         });
@@ -69,18 +68,20 @@ public class Principal {
         endereco += codigoModeloUsuario + "/anos/";
         json = consumo.obterDados(endereco);
 
-        System.out.println(json);
-
         List<DadosAnos> dadosAnos = conversor.converterDados(json, new TypeReference<>() {});
-        List<DadosVeiculo> dadosVeiculo = new ArrayList<>();
+        List<DadosVeiculo> listaDadosVeiculo = new ArrayList<>();
 
         for (DadosAnos anos: dadosAnos) {
             String tempEndereco = endereco + anos.codigo();
             json = consumo.obterDados(tempEndereco);
-            dadosVeiculo.add(conversor.converterDados(json, new TypeReference<>(){}));
+            listaDadosVeiculo.add(conversor.converterDados(json, new TypeReference<>(){}));
         }
 
-        dadosVeiculo.forEach(System.out::println);
+        List<Veiculo> listaVeiculos = listaDadosVeiculo
+                .stream()
+                .map(Veiculo::new)
+                .toList();
 
+        listaVeiculos.forEach(System.out::println);
     }
 }
