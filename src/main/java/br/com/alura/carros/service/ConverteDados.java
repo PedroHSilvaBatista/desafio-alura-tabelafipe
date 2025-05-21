@@ -5,11 +5,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ConverteDados implements IConverteDados {
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper MAPPER = new ObjectMapper();
 
     public <T> T converterDados(String string, TypeReference<T> typeRef) {
         try {
-            return mapper.readValue(string, typeRef);
+            return MAPPER.readValue(string, typeRef);
         } catch (JsonProcessingException e ) {
             throw new RuntimeException();
         }
